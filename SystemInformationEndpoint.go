@@ -6,24 +6,31 @@ import (
 	"presenter"
 )
 
+func exposeSystemInformationEndpoints() {
+	http.HandleFunc("/cpu/count", cpuCountRequestHandler)
+	http.HandleFunc("/gpu/count", gpuCountRequestHandler)
+	http.HandleFunc("/memory/size", memorySizeRequestHandler)
+	http.HandleFunc("/disk/partition", diskSizeRequestHandler)
+}
+
 var systemInformationPresenter = presenter.NewSystemInformationPresenter()
 
-func GetCpuCount(writer http.ResponseWriter, r *http.Request) {
+func cpuCountRequestHandler(writer http.ResponseWriter, r *http.Request) {
 	res, err := systemInformationPresenter.CpuCount()
 	writeGetRequest(res, err, writer, r)
 }
 
-func GetGpuCount(writer http.ResponseWriter, r *http.Request) {
+func gpuCountRequestHandler(writer http.ResponseWriter, r *http.Request) {
 	res, err := systemInformationPresenter.GpuCount()
 	writeGetRequest(res, err, writer, r)
 }
 
-func GetMemorySize(writer http.ResponseWriter, r *http.Request) {
+func memorySizeRequestHandler(writer http.ResponseWriter, r *http.Request) {
 	res, err := systemInformationPresenter.MemorySize()
 	writeGetRequest(res, err, writer, r)
 }
 
-func GetDiskPartition(writer http.ResponseWriter, r *http.Request) {
+func diskSizeRequestHandler(writer http.ResponseWriter, r *http.Request) {
 	res, err := systemInformationPresenter.DiskPartition()
 	writeGetRequest(res, err, writer, r)
 }
@@ -31,10 +38,10 @@ func GetDiskPartition(writer http.ResponseWriter, r *http.Request) {
 func writeGetRequest(object interface{}, err error, writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 
-	if request.Method == "GET" {
+	if request.Method == http.MethodGet {
 		if err != nil {
-			writer.WriteHeader(http.StatusNoContent)
-			json.NewEncoder(writer).Encode(err)
+			writer.WriteHeader(http.StatusNotFound)
+			writer.Write([]byte(err.Error()))
 		} else {
 			writer.WriteHeader(http.StatusOK)
 			json.NewEncoder(writer).Encode(object)
@@ -43,12 +50,4 @@ func writeGetRequest(object interface{}, err error, writer http.ResponseWriter, 
 		writer.WriteHeader(http.StatusNotFound)
 		writer.Write([]byte(`{"message": "not found"}`))
 	}
-}
-
-func main() {
-	http.HandleFunc("/cpu/count", GetCpuCount)
-	http.HandleFunc("/gpu/count", GetGpuCount)
-	http.HandleFunc("/memory/size", GetMemorySize)
-	http.HandleFunc("/disk/partition", GetDiskPartition)
-	http.ListenAndServe(":8080", nil)
 }
