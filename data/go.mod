@@ -1,4 +1,4 @@
-module datas
+module data
 
 go 1.16
 
