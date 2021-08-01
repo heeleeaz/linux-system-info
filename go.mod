@@ -1,4 +1,4 @@
-module system-info-service
+module main
 
 go 1.16
 

@@ -6,11 +6,13 @@ import (
 	"presenter"
 )
 
-func exposeSystemInformationEndpoints() {
+func main() {
 	http.HandleFunc("/cpu/count", cpuCountRequestHandler)
 	http.HandleFunc("/gpu/count", gpuCountRequestHandler)
 	http.HandleFunc("/memory/size", memorySizeRequestHandler)
 	http.HandleFunc("/disk/partition", diskSizeRequestHandler)
+
+	http.ListenAndServe(":8080", nil)
 }
 
 var systemInformationPresenter = presenter.NewSystemInformationPresenter()
