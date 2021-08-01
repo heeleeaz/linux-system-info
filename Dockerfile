@@ -2,17 +2,19 @@ FROM golang:1.16-alpine
 
 WORKDIR /app
 
-COPY presenter/go.mod ./main/go.mod
+COPY ./go.mod ./go.mod
 COPY ./data/go.mod ./data/go.mod
 COPY ./domain/go.mod ./domain/go.mod
+COPY ./presenter/go.mod ./presenter/go.mod
 
-RUN cd ./presenter && go mod download
+RUN go mod download
 
-COPY presenter/*.go ./main
+COPY *.go ./
 COPY ./data/*.go ./data
 COPY ./domain/*.go ./domain
+COPY ./presenter/*.go ./presenter
 
-RUN cd ./presenter && go build -o /system-info-service
+RUN go build -o /system-info-service
 
 EXPOSE 8080
 
