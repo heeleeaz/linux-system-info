@@ -6,7 +6,7 @@ import (
 )
 
 const FetchGpuCountCommand = "lspci | grep -i 'VGA\\|Display' | cut -d\" \" -f 1"
-const LspciBusPortValidatorRegex = "(?:\\d{2}\\:){2}\\d{1,2}"
+const LspciBusPortValidatorRegex = "^\\d{2}:\\d{2}\\.\\d{1,2}$"
 
 func GpuCount() (int, error) {
 	if out, err := executeCommand(FetchGpuCountCommand); err != nil {
@@ -16,7 +16,7 @@ func GpuCount() (int, error) {
 	}
 }
 
-func formatGpuCount(output string) (int, *FormatOutputError) {
+func formatGpuCount(output string) (int, error) {
 	trimmed := strings.TrimSpace(output)
 	newlineSeperated := regexp.MustCompile(`\s+`).ReplaceAllString(trimmed, "\n")
 	splitted := strings.Split(newlineSeperated, "\n")

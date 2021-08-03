@@ -34,10 +34,14 @@ func (repository SystemDataRepository) MemorySize() (domain.MemorySizeModel, err
 	}
 }
 
-func (repository SystemDataRepository) DiskPartition() (domain.DiskPartitionModel, error) {
+func (repository SystemDataRepository) DiskPartition() ([]domain.DiskPartitionModel, error) {
 	if out, err := DiskPartition(); err != nil {
-		return domain.DiskPartitionModel{}, err
+		return nil, err
 	} else {
-		return out.ToDomain(), nil
+		partitions := make([]domain.DiskPartitionModel, len(out))
+		for i, partition := range out {
+			partitions[i] = partition.ToDomain()
+		}
+		return partitions, nil
 	}
 }

@@ -3,6 +3,7 @@ package data
 import (
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 const CpuCountCommand = "nproc"
@@ -15,8 +16,9 @@ func CpuCount() (int, error) {
 	}
 }
 
-func formatCpuCount(output string) (int, *FormatOutputError) {
-	if count, err := strconv.Atoi(output); err == nil {
+func formatCpuCount(output string) (int, error) {
+	trimmed := strings.TrimSpace(output)
+	if count, err := strconv.Atoi(trimmed); err != nil {
 		return -1, &FormatOutputError{fmt.Sprintf("cannot convert %d to %T", count, count), err}
 	} else {
 		return count, nil

@@ -2,8 +2,8 @@ package presenter
 
 import "domain"
 
-func mapDiskPartitionDomainToPresenterModel(input domain.DiskPartitionModel) DiskPartitionPresenterModel {
-	return DiskPartitionPresenterModel{
+func mapDiskPartitionDomainToPresenterModel(input domain.DiskPartitionModel) DiskPartitionItemPresenterModel {
+	return DiskPartitionItemPresenterModel{
 		Name:           input.Name,
 		Size:           input.Size,
 		FileSystemType: input.FileSystemType,

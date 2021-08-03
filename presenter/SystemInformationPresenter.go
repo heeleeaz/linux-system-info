@@ -37,9 +37,15 @@ func (presenter SystemInformationPresenter) GpuCount() (GpuCountPresenterModel, 
 }
 
 func (presenter SystemInformationPresenter) DiskPartition() (DiskPartitionPresenterModel, error) {
-	if partition, err := repository.DiskPartition(); err != nil {
+	if partitions, err := repository.DiskPartition(); err != nil {
 		return DiskPartitionPresenterModel{}, err
 	} else {
-		return mapDiskPartitionDomainToPresenterModel(partition), nil
+		partitionItems := make([]DiskPartitionItemPresenterModel, len(partitions))
+
+		for i, partition := range partitions {
+			partitionItems[i] = mapDiskPartitionDomainToPresenterModel(partition)
+		}
+
+		return DiskPartitionPresenterModel{Partitions: partitionItems}, nil
 	}
 }
