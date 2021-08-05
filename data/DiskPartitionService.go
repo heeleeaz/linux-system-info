@@ -13,7 +13,7 @@ const DiskPartitionKeyValueItemSplitRegex = "\\w{1,20}=\"\\w*\\W*\""
 type DiskPartitionDataModel map[string]string
 
 func DiskPartition() ([]DiskPartitionDataModel, error) {
-	if out, err := executeCommand(FetchDiskPartitionCommand); err != nil {
+	if out, err := commandExecutor.executeCommand(FetchDiskPartitionCommand); err != nil {
 		return nil, err
 	} else {
 		return formatDiskPartition(out)

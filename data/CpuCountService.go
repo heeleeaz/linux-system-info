@@ -9,7 +9,7 @@ import (
 const CpuCountCommand = "nproc"
 
 func CpuCount() (int, error) {
-	if out, err := executeCommand(CpuCountCommand); err != nil {
+	if out, err := commandExecutor.executeCommand(CpuCountCommand); err != nil {
 		return -1, err
 	} else {
 		return formatCpuCount(out)
@@ -19,7 +19,7 @@ func CpuCount() (int, error) {
 func formatCpuCount(output string) (int, error) {
 	trimmed := strings.TrimSpace(output)
 	if count, err := strconv.Atoi(trimmed); err != nil {
-		return -1, &FormatOutputError{fmt.Sprintf("cannot convert %d to %T", count, count), err}
+		return -1, &FormatOutputError{fmt.Sprintf("cannot convert %s to %T", output, count), err}
 	} else {
 		return count, nil
 	}

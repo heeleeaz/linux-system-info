@@ -8,7 +8,7 @@ import (
 const FetchMemorySizeCommand = "grep -i MemTotal /proc/meminfo"
 
 func MemorySize() (string, error) {
-	if out, err := executeCommand(FetchMemorySizeCommand); err != nil {
+	if out, err := commandExecutor.executeCommand(FetchMemorySizeCommand); err != nil {
 		return "", err
 	} else {
 		return formatMemorySize(out)
