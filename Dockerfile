@@ -6,7 +6,6 @@ COPY ./go.mod ./go.mod
 COPY ./data/go.mod ./data/go.mod
 COPY ./domain/go.mod ./domain/go.mod
 COPY ./presenter/go.mod ./presenter/go.mod
-
 RUN go mod download
 
 COPY *.go ./
