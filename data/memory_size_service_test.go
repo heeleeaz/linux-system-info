@@ -6,7 +6,7 @@ import (
 )
 
 func TestMemorySize(t *testing.T) {
-	params := map[string]interface{}{"MemTotal: \t3221344 kB": "3221344 kB", "bash not found": &FormatOutputError{}}
+	params := map[string]interface{}{"MemTotal: \t3221344 kB": "3221344", "bash not found": &FormatOutputError{}}
 
 	for given, expected := range params {
 		t.Run("when given command output="+given, func(t *testing.T) {

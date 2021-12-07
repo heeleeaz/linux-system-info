@@ -2,10 +2,13 @@ package data
 
 import (
 	"fmt"
-	"strings"
+	"regexp"
 )
 
 const FetchMemorySizeCommand = "grep -i MemTotal /proc/meminfo"
+
+const MemorySizeFormatMatchCheckRegex = "(?:\\w+:)\\s+(?:\\d+)\\s+(kB)"
+const MemorySizeExtractorRegex = "\\d+"
 
 func MemorySize() (string, error) {
 	if out, err := commandExecutor.executeCommand(FetchMemorySizeCommand); err != nil {
@@ -16,11 +19,9 @@ func MemorySize() (string, error) {
 }
 
 func formatMemorySize(output string) (string, error) {
-	stringSplit := strings.Split(output, ":")
-	if len(stringSplit) == 2 {
-		memorySize := strings.TrimSpace(stringSplit[1])
-		return memorySize, nil
+	if match, err := regexp.MatchString(MemorySizeFormatMatchCheckRegex, output); match {
+		return regexp.MustCompile(MemorySizeExtractorRegex).FindString(output), nil
 	} else {
-		return "", &FormatOutputError{fmt.Sprintf("error formatting output: %s", output), nil}
+		return "", &FormatOutputError{fmt.Sprintf("error formatting output: %s", output), err}
 	}
 }
